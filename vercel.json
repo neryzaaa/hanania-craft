@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd \"Hanania 2/Hanania/frontend\" && npm install && npm run build",
+  "outputDirectory": "Hanania 2/Hanania/frontend/dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
