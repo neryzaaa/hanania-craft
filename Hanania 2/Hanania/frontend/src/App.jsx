@@ -1,30 +1,82 @@
 import React, { useState, useEffect } from 'react';
 
-                                        const initialProducts = [
-                                        {id: 1, name: "Peony & Rose Blush Harmony", category: "Hand Bouquet", price: 350000, image: "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: true },
-                                        {id: 2, name: "Rustic Pampas & Hydrangea", category: "Flower Arrangement", price: 450000, image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Pre-Order (PO)", isFeatured: true },
-                                        {id: 3, name: "Sunflower Fields Crochet", category: "Rajutan/Crochet", price: 250000, image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: true },
-                                        {id: 4, name: "Classic Calla Lily Elegance", category: "Wedding Bouquet", price: 850000, image: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Pre-Order (PO)", isFeatured: true },
-                                        {id: 5, name: "Sweet Pink Carnation", category: "Hand Bouquet", price: 200000, image: "https://images.unsplash.com/photo-1561181286-d3fee7d55ef6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: false },
-                                        {id: 6, name: "Luxury Red Roses Box", category: "Hampers", price: 650000, image: "https://images.unsplash.com/photo-1548094990-c16ca90f1f0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: false },
-                                        ];
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
+    : (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? 'http://localhost:8000' : '');
 
-                                        const categories = ["Semua Koleksi", "Hand Bouquet", "Bucket", "Hampers", "Wedding Bouquet", "Rajutan/Crochet", "Flower Arrangement", "Bunga Papan", "Backdrop Photo", "Gift Wrapping"];
+const getStorage = (key, fallback) => {
+    try {
+        const item = localStorage.getItem(key);
+        if (!item) return fallback;
+        const parsed = JSON.parse(item);
+        if (Array.isArray(fallback) && (!Array.isArray(parsed) || parsed.length === 0)) {
+            return fallback;
+        }
+        return parsed;
+    } catch (e) {
+        return fallback;
+    }
+};
 
-                                        const initialOrders = [
-                                        {id: "HN-092", customer: "Neryza Yulinda", product: "Peony & Rose Blush Harmony", date: "12 Jul 2026", status: 0, price: 350000, address: "Jl. Sudirman No. 45, Jakarta Selatan" },
-                                        {id: "HN-091", customer: "Audy Rizkia", product: "Rustic Pampas & Hydrangea", date: "11 Jul 2026", status: 1, price: 450000, address: "Kuningan, Jakarta" },
-                                        {id: "HN-090", customer: "Febi Maulidiya", product: "Luxury Red Roses Box", date: "10 Jul 2026", status: 2, price: 650000, address: "Depok, Jawa Barat" },
-                                        {id: "HN-089", customer: "Bapaknya Si Audy", product: "Classic Calla Lily Elegance", date: "09 Jul 2026", status: 4, price: 850000, address: "Bekasi, Jawa Barat" },
-                                        ];
+const setStorage = (key, value) => {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+        console.warn("Could not save to localStorage", e);
+    }
+};
 
-                                        const initialStocks = [
-                                        {id: 1, name: "Mawar Putih (Avalanche)", category: "Bunga Segar", qty: 150, unit: "Tangkai", status: "Aman", img: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&q=80&w=100" },
-                                        {id: 2, name: "Kertas Cellophane Nude", category: "Kertas Wrapping", qty: 12, unit: "Roll", status: "Menipis", img: "" },
-                                        {id: 3, name: "Pita Satin Sage Green", category: "Pita & Aksesoris", qty: 45, unit: "Roll", status: "Aman", img: "" },
-                                        {id: 4, name: "Baby Breath", category: "Bunga Segar", qty: 2, unit: "Ikat", status: "Kritis", img: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&q=80&w=100" },
-                                        {id: 5, name: "Oasis Floral Foam", category: "Perlengkapan", qty: 30, unit: "Pcs", status: "Aman", img: "" },
-                                        ];
+const initialProducts = [
+    { id: 1, name: "Peony & Rose Blush Harmony", category: "Hand Bouquet", price: 375000, image: "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: true },
+    { id: 2, name: "Rustic Pampas & Hydrangea", category: "Flower Arrangement", price: 450000, image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Pre-Order (PO)", isFeatured: true },
+    { id: 3, name: "Sunflower Fields Crochet", category: "Rajutan/Crochet", price: 250000, image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: true },
+    { id: 4, name: "Classic Calla Lily Elegance", category: "Wedding Bouquet", price: 850000, image: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Pre-Order (PO)", isFeatured: true },
+    { id: 5, name: "Sweet Pink Carnation", category: "Hand Bouquet", price: 200000, image: "https://i.pinimg.com/736x/2e/18/93/2e1893f43e54d31867c9dd8b13624b9b.jpg", status: "Tersedia", isFeatured: false },
+    { id: 6, name: "Luxury Red Roses Box", category: "Hampers", price: 650000, image: "https://images.unsplash.com/photo-1548094990-c16ca90f1f0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", status: "Tersedia", isFeatured: false },
+];
+
+const categories = ["Semua Koleksi", "Hand Bouquet", "Bucket", "Hampers", "Wedding Bouquet", "Rajutan/Crochet", "Flower Arrangement", "Bunga Papan", "Backdrop Photo", "Gift Wrapping"];
+
+const initialOrders = [
+    { id: "HN-092", customer: "Neryza Yulinda", product: "Peony & Rose Blush Harmony", date: "12 Jul 2026", status: 4, price: 350000, address: "Jl. Sudirman No. 45, Jakarta Selatan" },
+    { id: "HN-091", customer: "Audy Rizkia", product: "Rustic Pampas & Hydrangea", date: "11 Jul 2026", status: 4, price: 450000, address: "Kuningan, Jakarta" },
+    { id: "HN-090", customer: "Febi Maulidiya", product: "Luxury Red Roses Box", date: "10 Jul 2026", status: 4, price: 650000, address: "Depok, Jawa Barat" },
+    { id: "HN-089", customer: "Bapaknya Si Audy", product: "Classic Calla Lily Elegance", date: "09 Jul 2026", status: 4, price: 850000, address: "Bekasi, Jawa Barat" },
+    { id: "HN-642", customer: "kiyo", product: "Peony & Rose Blush Harmony", date: "14 Jul 2026", status: 4, price: 375000, address: "mentas" },
+    { id: "HN-548", customer: "luna", product: "Classic Calla Lily Elegance", date: "14 Jul 2026", status: 2, price: 850000, address: "pedurenan" },
+    { id: "HN-335", customer: "ija", product: "Rustic Pampas & Hydrangea", date: "14 Jul 2026", status: 3, price: 450000, address: "Swiss" },
+    { id: "HN-667", customer: "koir", product: "Sunflower Fields Crochet", date: "16 Jul 2026", status: 4, price: 250000, address: "kalibata" }
+];
+
+const initialStocks = [
+    { id: 1, name: "Mawar Putih (Avalanche)", category: "Bunga Segar", qty: 8, unit: "Tangkai", status: "Aman", img: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&q=80&w=100" },
+    { id: 2, name: "Kertas Cellophane Nude", category: "Kertas Wrapping", qty: 12, unit: "Roll", status: "Menipis", img: "" },
+    { id: 3, name: "Pita Satin Sage Green", category: "Pita & Aksesoris", qty: 45, unit: "Roll", status: "Aman", img: "" },
+    { id: 4, name: "Baby Breath", category: "Bunga Segar", qty: 2, unit: "Ikat", status: "Kritis", img: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&q=80&w=100" },
+    { id: 5, name: "Oasis Floral Foam", category: "Perlengkapan", qty: 30, unit: "Pcs", status: "Aman", img: "" },
+];
+
+const initialReviews = [
+    { id: 1, order_id: "HN-089", customer: "Bapaknya Si Audy", rating: 5, text: "Rangkaian bunganya sangat rapi dan bunganya fresh! Sangat memuaskan.", isFeatured: false, date: "10 Jul 2026" },
+    { id: 2, order_id: "HN-088", customer: "Dina Lorenza", rating: 5, text: "Pelayanan sangat ramah dan pengiriman tepat waktu. Recomended banget!", isFeatured: true, date: "08 Jul 2026" },
+    { id: 3, order_id: "HN-087", customer: "Siti Nurhaliza", rating: 4, text: "Bagus, tapi pengerjaannya agak lama sedikit.", isFeatured: true, date: "05 Jul 2026" },
+    { id: 4, order_id: "HN-086", customer: "Rina Gunawan", rating: 5, text: "Sesuai ekspektasi! Kualitas premium, ga nyesel order disini.", isFeatured: true, date: "01 Jul 2026" }
+];
+
+const initialStockLogs = [
+    { id: 1, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "masuk", qty: 100, date: "10 Jul 2026", note: "Restock supplier rutin" },
+    { id: 2, stock_id: 4, name: "Baby Breath", type: "keluar", qty: 5, date: "11 Jul 2026", note: "Dipakai untuk order HN-091" },
+    { id: 3, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "masuk", qty: 50, date: "13 Jul 2026", note: "Restock dari supplier B" },
+    { id: 4, stock_id: 2, name: "Kertas Cellophane Nude", type: "masuk", qty: 12, date: "13 Jul 2026", note: "Stok Awal" },
+    { id: 5, stock_id: 3, name: "Pita Satin Sage Green", type: "masuk", qty: 45, date: "13 Jul 2026", note: "Stok Awal" },
+    { id: 6, stock_id: 4, name: "Baby Breath", type: "masuk", qty: 7, date: "13 Jul 2026", note: "Stok Awal" },
+    { id: 7, stock_id: 5, name: "Oasis Floral Foam", type: "masuk", qty: 30, date: "13 Jul 2026", note: "Stok Awal" },
+    { id: 8, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "masuk", qty: 98, date: "14 Jul 2026", note: "-" },
+    { id: 9, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "keluar", qty: 100, date: "14 Jul 2026", note: "-" },
+    { id: 10, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "masuk", qty: 190, date: "14 Jul 2026", note: "-" },
+    { id: 11, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "keluar", qty: 370, date: "14 Jul 2026", note: "-" },
+    { id: 12, stock_id: 1, name: "Mawar Putih (Avalanche)", type: "keluar", qty: 10, date: "14 Jul 2026", note: "-" }
+];
 
                                         const statusSteps = ["Diproses", "Dalam Pembuatan", "Siap Kirim", "Dikirim", "Selesai"];
 
@@ -591,16 +643,16 @@ import React, { useState, useEffect } from 'react';
                         alert("Maksimal hanya 4 produk yang bisa ditampilkan di Beranda!");
                         return;
                     }
-                    try {
-                        const res = await fetch(`http://localhost:8000/api/products/${id}/featured`, {
-                            method: 'PUT',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({isFeatured: newFeatured})
-                        });
-                        if(res.ok) {
-                            setProducts(products.map(p => p.id === id ? {...p, isFeatured: newFeatured} : p));
-                        }
-                    } catch(e) { console.error(e); }
+                    setProducts(products.map(p => p.id === id ? {...p, isFeatured: newFeatured} : p));
+                    if (API_BASE) {
+                        try {
+                            await fetch(`${API_BASE}/api/products/${id}/featured`, {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({isFeatured: newFeatured})
+                            });
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                 const toggleFeaturedReview = async (id) => {
@@ -611,16 +663,16 @@ import React, { useState, useEffect } from 'react';
                         alert("Maksimal hanya 3 ulasan yang bisa ditampilkan di Beranda!");
                         return;
                     }
-                    try {
-                        const res = await fetch(`http://localhost:8000/api/reviews/${id}/featured`, {
-                            method: 'PUT',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({isFeatured: newFeatured})
-                        });
-                        if (res.ok) {
-                            setReviews(reviews.map(r => r.id === id ? {...r, isFeatured: newFeatured} : r));
-                        }
-                    } catch(e) { console.error(e); }
+                    setReviews(reviews.map(r => r.id === id ? {...r, isFeatured: newFeatured} : r));
+                    if (API_BASE) {
+                        try {
+                            await fetch(`${API_BASE}/api/reviews/${id}/featured`, {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({isFeatured: newFeatured})
+                            });
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                                         return (
@@ -713,53 +765,58 @@ import React, { useState, useEffect } from 'react';
                 const handleSaveProduct = async () => {
                     if(!newName || !newPrice) return;
                     const newProd = {
+                        id: Date.now(),
                         name: newName, category: newCat,
-                        price: parseInt(newPrice), status: newStatus, image: newImg || "https://placehold.co/800", isFeatured: false
+                        price: parseInt(newPrice), status: newStatus, image: newImg || "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?auto=format&fit=crop&w=800&q=80", isFeatured: false
                     };
-                    try {
-                        const res = await fetch('http://localhost:8000/api/products', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(newProd)
-                        });
-                        if(res.ok) {
-                            const createdProd = await res.json();
-                            setProducts([...products, createdProd]);
-                            setShowForm(false);
-                            setNewName(""); setNewPrice(""); setNewImg("");
-                        }
-                    } catch(e) { console.error(e); }
+                    setProducts([...products, newProd]);
+                    setShowForm(false);
+                    setNewName(""); setNewPrice(""); setNewImg("");
+                    if (API_BASE) {
+                        try {
+                            const res = await fetch(`${API_BASE}/api/products`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(newProd)
+                            });
+                            if (res.ok) {
+                                const data = await res.json();
+                                if (data && data.product) {
+                                    setProducts(prev => prev.map(p => p.id === newProd.id ? data.product : p));
+                                }
+                            }
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                 const handleUpdateProduct = async () => {
                     if (!selectedProduct || !editName || !editPrice) return;
                     const updatedProd = {
                         name: editName, category: editCat,
-                        price: parseInt(editPrice), status: editStatus, image: editImg || "https://placehold.co/800"
+                        price: parseInt(editPrice), status: editStatus, image: editImg || selectedProduct.image
                     };
-                    try {
-                        const res = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}`, {
-                            method: 'PUT',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(updatedProd)
-                        });
-                        if (res.ok) {
-                            const result = await res.json();
-                            setProducts(products.map(p => p.id === selectedProduct.id ? result.product : p));
-                            setSelectedProduct(null);
-                        }
-                    } catch(e) { console.error(e); }
+                    setProducts(products.map(p => p.id === selectedProduct.id ? {...p, ...updatedProd} : p));
+                    setSelectedProduct(null);
+                    if (API_BASE) {
+                        try {
+                            await fetch(`${API_BASE}/api/products/${selectedProduct.id}`, {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(updatedProd)
+                            });
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                 const handleDeleteProduct = async (id) => {
                     if(confirm('Hapus produk ini secara permanen?')) {
-                        try {
-                            const res = await fetch(`http://localhost:8000/api/products/${id}`, { method: 'DELETE' });
-                            if(res.ok) {
-                                setProducts(products.filter(prod => prod.id !== id));
-                                setSelectedProduct(null);
-                            }
-                        } catch (e) { console.error(e); }
+                        setProducts(products.filter(prod => prod.id !== id));
+                        setSelectedProduct(null);
+                        if (API_BASE) {
+                            try {
+                                await fetch(`${API_BASE}/api/products/${id}`, { method: 'DELETE' });
+                            } catch (e) { console.warn("Deleted locally, backend offline:", e); }
+                        }
                     }
                 };
 
@@ -902,16 +959,16 @@ import React, { useState, useEffect } from 'react';
                                         const [prodName, setProdName] = React.useState("");
 
                 const updateStatus = async (id, newStatus) => {
-                    try {
-                        const res = await fetch(`http://localhost:8000/api/orders/${id}/status`, {
-                            method: 'PUT',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({status: parseInt(newStatus)})
-                        });
-                        if (res.ok) {
-                            setOrders(orders.map(o => o.id === id ? { ...o, status: parseInt(newStatus) } : o));
-                        }
-                    } catch(e) { console.error(e); }
+                    setOrders(orders.map(o => o.id === id ? { ...o, status: parseInt(newStatus) } : o));
+                    if (API_BASE) {
+                        try {
+                            await fetch(`${API_BASE}/api/orders/${id}/status`, {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({status: parseInt(newStatus)})
+                            });
+                        } catch(e) { console.warn("Updated locally, backend offline:", e); }
+                    }
                 };
 
                 const handleAddOrder = async () => {
@@ -926,18 +983,19 @@ import React, { useState, useEffect } from 'react';
                         id: newId, customer: custName, product: prodName, date: dateStr, status: 0, price: price, address: custAddress || "Alamat tidak diisi"
                     };
 
-                    try {
-                        const res = await fetch('http://localhost:8000/api/orders', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(newOrder)
-                        });
-                        if(res.ok) {
-                            setOrders([...orders, newOrder]);
-                            setShowForm(false);
-                            setCustName(""); setCustAddress(""); setProdName("");
-                        }
-                    } catch(e) { console.error(e); }
+                    setOrders([...orders, newOrder]);
+                    setShowForm(false);
+                    setCustName(""); setCustAddress(""); setProdName("");
+
+                    if (API_BASE) {
+                        try {
+                            await fetch(`${API_BASE}/api/orders`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(newOrder)
+                            });
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                                         return (
@@ -1030,23 +1088,34 @@ import React, { useState, useEffect } from 'react';
 
                 const handleSaveStock = async () => {
                     if(!stockName || !stockQty) return;
+                    const qtyVal = parseInt(stockQty);
                     const newStock = {
-                        name: stockName, min: 10,
-                        qty: parseInt(stockQty), unit: stockUnit
+                        id: Date.now(),
+                        name: stockName,
+                        category: stockCat || "Bunga Segar",
+                        qty: qtyVal,
+                        unit: stockUnit || "Pcs",
+                        status: qtyVal > 10 ? "Aman" : qtyVal > 0 ? "Menipis" : "Kritis"
                     };
-                    try {
-                        const res = await fetch('http://localhost:8000/api/stocks', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(newStock)
-                        });
-                        if(res.ok) {
-                            const createdStock = await res.json();
-                            setStocks([...stocks, createdStock]);
-                            setShowAddStock(false);
-                            setStockName(""); setStockQty(""); setStockUnit("");
-                        }
-                    } catch(e) { console.error(e); }
+                    setStocks([...stocks, newStock]);
+                    setShowAddStock(false);
+                    setStockName(""); setStockQty(""); setStockUnit("");
+
+                    if (API_BASE) {
+                        try {
+                            const res = await fetch(`${API_BASE}/api/stocks`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(newStock)
+                            });
+                            if (res.ok) {
+                                const data = await res.json();
+                                if (data && data.stock) {
+                                    setStocks(prev => prev.map(s => s.id === newStock.id ? data.stock : s));
+                                }
+                            }
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                 const handleUpdateStock = async () => {
@@ -1055,54 +1124,50 @@ import React, { useState, useEffect } from 'react';
                     const newQty = stockActionType === 'masuk' ? selectedStock.qty + amount : selectedStock.qty - amount;
                     if (newQty < 0) { alert('Stok tidak mencukupi!'); return; }
 
-                    try {
-                        // 1. Update stock qty
-                        const resStock = await fetch(`http://localhost:8000/api/stocks/${selectedStock.id}`, {
-                            method: 'PUT',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({qty: newQty})
-                        });
-                        
-                        if (resStock.ok) {
-                            setStocks(stocks.map(s => s.id === selectedStock.id ? {...s, qty: newQty} : s));
-                            
-                            // 2. Add log entry
-                            const dateStr = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
-                            const logEntry = {
-                                stock_id: selectedStock.id,
-                                name: selectedStock.name,
-                                type: stockActionType,
-                                qty: amount,
-                                date: dateStr,
-                                note: stockActionNote || '-'
-                            };
-                            const logRes = await fetch('http://localhost:8000/api/stock_logs', {
+                    const newStatus = newQty > 10 ? "Aman" : newQty > 0 ? "Menipis" : "Kritis";
+                    setStocks(stocks.map(s => s.id === selectedStock.id ? {...s, qty: newQty, status: newStatus} : s));
+
+                    const dateStr = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year: 'numeric'});
+                    const logEntry = {
+                        id: Date.now(),
+                        stock_id: selectedStock.id,
+                        name: selectedStock.name,
+                        type: stockActionType,
+                        qty: amount,
+                        date: dateStr,
+                        note: stockActionNote || '-'
+                    };
+                    setStockLogs([...stockLogs, logEntry]);
+
+                    setSelectedStock(null);
+                    setStockActionQty("");
+                    setStockActionNote("");
+
+                    if (API_BASE) {
+                        try {
+                            await fetch(`${API_BASE}/api/stocks/${selectedStock.id}`, {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({qty: newQty, status: newStatus})
+                            });
+                            await fetch(`${API_BASE}/api/stock_logs`, {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
                                 body: JSON.stringify(logEntry)
                             });
-                            
-                            if (logRes.ok) {
-                                const newLog = await logRes.json();
-                                setStockLogs([...stockLogs, newLog.stock_log || logEntry]); // assuming backend returns created log
-                            }
-                            
-                            setSelectedStock(null);
-                            setStockActionQty("");
-                            setStockActionNote("");
-                        }
-                    } catch(e) { console.error(e); }
+                        } catch(e) { console.warn("Saved locally, backend offline:", e); }
+                    }
                 };
 
                 const handleDeleteStock = async (id) => {
                     if (confirm("Yakin ingin menghapus item stok ini?")) {
-                        try {
-                            const res = await fetch(`http://localhost:8000/api/stocks/${id}`, { method: 'DELETE' });
-                            if (res.ok) {
-                                setStocks(stocks.filter(s => s.id !== id));
-                                setSelectedStock(null);
-                            }
-                        } catch(e) { console.error(e); }
+                        setStocks(stocks.filter(s => s.id !== id));
+                        setSelectedStock(null);
+                        if (API_BASE) {
+                            try {
+                                await fetch(`${API_BASE}/api/stocks/${id}`, { method: 'DELETE' });
+                            } catch(e) { console.warn("Deleted locally, backend offline:", e); }
+                        }
                     }
                 };
 
@@ -1475,29 +1540,86 @@ import React, { useState, useEffect } from 'react';
             const [role, setRole] = React.useState('public');
             const [activeView, setActiveView] = React.useState('home');
             
-            const [products, setProducts] = React.useState([]);
-            const [orders, setOrders] = React.useState([]);
-            const [stocks, setStocks] = React.useState([]);
-            const [stockLogs, setStockLogs] = React.useState([]);
-            const [reviews, setReviews] = React.useState([]);
+            const [products, setProductsState] = React.useState(() => getStorage('hanania_products', initialProducts));
+            const [orders, setOrdersState] = React.useState(() => getStorage('hanania_orders', initialOrders));
+            const [stocks, setStocksState] = React.useState(() => getStorage('hanania_stocks', initialStocks));
+            const [stockLogs, setStockLogsState] = React.useState(() => getStorage('hanania_stock_logs', initialStockLogs));
+            const [reviews, setReviewsState] = React.useState(() => getStorage('hanania_reviews', initialReviews));
+
+            const setProducts = (valOrFn) => {
+                setProductsState(prev => {
+                    const next = typeof valOrFn === 'function' ? valOrFn(prev) : valOrFn;
+                    setStorage('hanania_products', next);
+                    return next;
+                });
+            };
+            const setOrders = (valOrFn) => {
+                setOrdersState(prev => {
+                    const next = typeof valOrFn === 'function' ? valOrFn(prev) : valOrFn;
+                    setStorage('hanania_orders', next);
+                    return next;
+                });
+            };
+            const setStocks = (valOrFn) => {
+                setStocksState(prev => {
+                    const next = typeof valOrFn === 'function' ? valOrFn(prev) : valOrFn;
+                    setStorage('hanania_stocks', next);
+                    return next;
+                });
+            };
+            const setStockLogs = (valOrFn) => {
+                setStockLogsState(prev => {
+                    const next = typeof valOrFn === 'function' ? valOrFn(prev) : valOrFn;
+                    setStorage('hanania_stock_logs', next);
+                    return next;
+                });
+            };
+            const setReviews = (valOrFn) => {
+                setReviewsState(prev => {
+                    const next = typeof valOrFn === 'function' ? valOrFn(prev) : valOrFn;
+                    setStorage('hanania_reviews', next);
+                    return next;
+                });
+            };
             
             React.useEffect(() => {
                 const fetchData = async () => {
+                    if (!API_BASE) return;
                     try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 2500);
+
                         const [pRes, oRes, sRes, slRes, rRes] = await Promise.all([
-                            fetch('http://localhost:8000/api/products'),
-                            fetch('http://localhost:8000/api/orders'),
-                            fetch('http://localhost:8000/api/stocks'),
-                            fetch('http://localhost:8000/api/stock_logs'),
-                            fetch('http://localhost:8000/api/reviews')
+                            fetch(`${API_BASE}/api/products`, { signal: controller.signal }),
+                            fetch(`${API_BASE}/api/orders`, { signal: controller.signal }),
+                            fetch(`${API_BASE}/api/stocks`, { signal: controller.signal }),
+                            fetch(`${API_BASE}/api/stock_logs`, { signal: controller.signal }),
+                            fetch(`${API_BASE}/api/reviews`, { signal: controller.signal })
                         ]);
-                        if(pRes.ok) setProducts(await pRes.json());
-                        if(oRes.ok) setOrders(await oRes.json());
-                        if(sRes.ok) setStocks(await sRes.json());
-                        if(slRes.ok) setStockLogs(await slRes.json());
-                        if(rRes.ok) setReviews(await rRes.json());
+                        clearTimeout(timeoutId);
+
+                        if(pRes.ok) {
+                            const pData = await pRes.json();
+                            if (pData && pData.length > 0) setProducts(pData);
+                        }
+                        if(oRes.ok) {
+                            const oData = await oRes.json();
+                            if (oData && oData.length > 0) setOrders(oData);
+                        }
+                        if(sRes.ok) {
+                            const sData = await sRes.json();
+                            if (sData && sData.length > 0) setStocks(sData);
+                        }
+                        if(slRes.ok) {
+                            const slData = await slRes.json();
+                            if (slData && slData.length > 0) setStockLogs(slData);
+                        }
+                        if(rRes.ok) {
+                            const rData = await rRes.json();
+                            if (rData && rData.length > 0) setReviews(rData);
+                        }
                     } catch (e) {
-                        console.error("Failed to fetch initial data", e);
+                        console.info("Backend API offline / running in standalone mode with local storage.");
                     }
                 };
                 fetchData();
@@ -1513,26 +1635,37 @@ import React, { useState, useEffect } from 'react';
                 const handleLogin = async (e) => {
                     e.preventDefault();
                     setError("");
-                    try {
-                        const res = await fetch('http://localhost:8000/api/login', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ username, password })
-                        });
-                        if (res.ok) {
-                            setRole('admin');
-                        } else {
-                            const newFailCount = failCount + 1;
-                            setFailCount(newFailCount);
-                            if (newFailCount >= 3) {
-                                setIsKickedOut(true);
-                                setTimeout(() => setRole('public'), 4000);
-                            } else {
-                                setError(`Username atau Password salah. (Sisa percobaan: ${3 - newFailCount})`);
-                            }
+                    
+                    let loginOk = false;
+                    if (API_BASE) {
+                        try {
+                            const res = await fetch(`${API_BASE}/api/login`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ username, password })
+                            });
+                            if (res.ok) loginOk = true;
+                        } catch (e) {
+                            console.warn("Backend login failed or offline, fallback to local credentials", e);
                         }
-                    } catch (e) {
-                        setError("Terjadi kesalahan koneksi.");
+                    }
+
+                    // Fallback to local admin credentials (guarantees login works on Vercel without backend)
+                    if (!loginOk && username === "tyarahmawati" && password === "244466666") {
+                        loginOk = true;
+                    }
+
+                    if (loginOk) {
+                        setRole('admin');
+                    } else {
+                        const newFailCount = failCount + 1;
+                        setFailCount(newFailCount);
+                        if (newFailCount >= 3) {
+                            setIsKickedOut(true);
+                            setTimeout(() => setRole('public'), 4000);
+                        } else {
+                            setError(`Username atau Password salah. (Sisa percobaan: ${3 - newFailCount})`);
+                        }
                     }
                 };
 
