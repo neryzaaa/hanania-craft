@@ -1,0 +1,336 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Peony & Rose Blush Harmony",
+      "category": "Hand Bouquet",
+      "price": 375000,
+      "image": "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "status": "Tersedia",
+      "isFeatured": true
+    },
+    {
+      "id": 2,
+      "name": "Rustic Pampas & Hydrangea",
+      "category": "Flower Arrangement",
+      "price": 450000,
+      "image": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "status": "Pre-Order (PO)",
+      "isFeatured": true
+    },
+    {
+      "id": 3,
+      "name": "Sunflower Fields Crochet",
+      "category": "Rajutan/Crochet",
+      "price": 250000,
+      "image": "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "status": "Tersedia",
+      "isFeatured": true
+    },
+    {
+      "id": 4,
+      "name": "Classic Calla Lily Elegance",
+      "category": "Wedding Bouquet",
+      "price": 850000,
+      "image": "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "status": "Pre-Order (PO)",
+      "isFeatured": true
+    },
+    {
+      "id": 5,
+      "name": "Sweet Pink Carnation",
+      "category": "Hand Bouquet",
+      "price": 200000,
+      "image": "https://i.pinimg.com/736x/2e/18/93/2e1893f43e54d31867c9dd8b13624b9b.jpg",
+      "status": "Tersedia",
+      "isFeatured": false
+    },
+    {
+      "id": 6,
+      "name": "Luxury Red Roses Box",
+      "category": "Hampers",
+      "price": 650000,
+      "image": "https://images.unsplash.com/photo-154809https://i.pinimg.com/736x/2e/18/93/2e1893f43e54d31867c9dd8b13624b9b.jpg4990-c16ca90f1f0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "status": "Tersedia",
+      "isFeatured": false
+    }
+  ],
+  "orders": [
+    {
+      "id": "HN-092",
+      "customer": "Neryza Yulinda",
+      "product": "Peony & Rose Blush Harmony",
+      "date": "12 Jul 2026",
+      "status": 4,
+      "price": 350000,
+      "address": "Jl. Sudirman No. 45, Jakarta Selatan"
+    },
+    {
+      "id": "HN-091",
+      "customer": "Audy Rizkia",
+      "product": "Rustic Pampas & Hydrangea",
+      "date": "11 Jul 2026",
+      "status": 4,
+      "price": 450000,
+      "address": "Kuningan, Jakarta"
+    },
+    {
+      "id": "HN-090",
+      "customer": "Febi Maulidiya",
+      "product": "Luxury Red Roses Box",
+      "date": "10 Jul 2026",
+      "status": 4,
+      "price": 650000,
+      "address": "Depok, Jawa Barat"
+    },
+    {
+      "id": "HN-089",
+      "customer": "Bapaknya Si Audy",
+      "product": "Classic Calla Lily Elegance",
+      "date": "09 Jul 2026",
+      "status": 4,
+      "price": 850000,
+      "address": "Bekasi, Jawa Barat"
+    },
+    {
+      "id": "HN-642",
+      "customer": "kiyo",
+      "product": "Peony & Rose Blush Harmony",
+      "date": "14 Jul 2026",
+      "status": 4,
+      "price": 375000,
+      "address": "mentas"
+    },
+    {
+      "id": "HN-548",
+      "customer": "luna",
+      "product": "Classic Calla Lily Elegance",
+      "date": "14 Jul 2026",
+      "status": 2,
+      "price": 850000,
+      "address": "pedurenan"
+    },
+    {
+      "id": "HN-335",
+      "customer": "ija",
+      "product": "Rustic Pampas & Hydrangea",
+      "date": "14 Jul 2026",
+      "status": 3,
+      "price": 450000,
+      "address": "Swiss"
+    },
+    {
+      "id": "HN-667",
+      "customer": "koir",
+      "product": "Sunflower Fields Crochet",
+      "date": "16 Jul 2026",
+      "status": 4,
+      "price": 250000,
+      "address": "kalibata"
+    }
+  ],
+  "stocks": [
+    {
+      "id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "category": "Bunga Segar",
+      "qty": 8,
+      "unit": "Tangkai",
+      "status": "Aman",
+      "img": "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&q=80&w=100"
+    },
+    {
+      "id": 2,
+      "name": "Kertas Cellophane Nude",
+      "category": "Kertas Wrapping",
+      "qty": 12,
+      "unit": "Roll",
+      "status": "Menipis",
+      "img": ""
+    },
+    {
+      "id": 3,
+      "name": "Pita Satin Sage Green",
+      "category": "Pita & Aksesoris",
+      "qty": 45,
+      "unit": "Roll",
+      "status": "Aman",
+      "img": ""
+    },
+    {
+      "id": 4,
+      "name": "Baby Breath",
+      "category": "Bunga Segar",
+      "qty": 2,
+      "unit": "Ikat",
+      "status": "Kritis",
+      "img": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&q=80&w=100"
+    },
+    {
+      "id": 5,
+      "name": "Oasis Floral Foam",
+      "category": "Perlengkapan",
+      "qty": 30,
+      "unit": "Pcs",
+      "status": "Aman",
+      "img": ""
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "order_id": "HN-089",
+      "customer": "Bapaknya Si Audy",
+      "rating": 5,
+      "text": "Rangkaian bunganya sangat rapi dan bunganya fresh! Sangat memuaskan.",
+      "isFeatured": false,
+      "date": "10 Jul 2026"
+    },
+    {
+      "id": 2,
+      "order_id": "HN-088",
+      "customer": "Dina Lorenza",
+      "rating": 5,
+      "text": "Pelayanan sangat ramah dan pengiriman tepat waktu. Recomended banget!",
+      "isFeatured": true,
+      "date": "08 Jul 2026"
+    },
+    {
+      "id": 3,
+      "order_id": "HN-087",
+      "customer": "Siti Nurhaliza",
+      "rating": 4,
+      "text": "Bagus, tapi pengerjaannya agak lama sedikit.",
+      "isFeatured": true,
+      "date": "05 Jul 2026"
+    },
+    {
+      "id": 4,
+      "order_id": "HN-086",
+      "customer": "Rina Gunawan",
+      "rating": 5,
+      "text": "Sesuai ekspektasi! Kualitas premium, ga nyesel order disini.",
+      "isFeatured": true,
+      "date": "01 Jul 2026"
+    }
+  ],
+  "stock_logs": [
+    {
+      "id": 1,
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "masuk",
+      "qty": 100,
+      "date": "10 Jul 2026",
+      "note": "Restock supplier rutin"
+    },
+    {
+      "id": 2,
+      "stock_id": 4,
+      "name": "Baby Breath",
+      "type": "keluar",
+      "qty": 5,
+      "date": "11 Jul 2026",
+      "note": "Dipakai untuk order HN-091"
+    },
+    {
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "masuk",
+      "qty": 50,
+      "date": "13 Jul 2026",
+      "note": "Restock dari supplier B"
+    },
+    {
+      "id": 3,
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "masuk",
+      "qty": 50,
+      "date": "13 Jul 2026",
+      "note": "Stok Awal"
+    },
+    {
+      "id": 4,
+      "stock_id": 2,
+      "name": "Kertas Cellophane Nude",
+      "type": "masuk",
+      "qty": 12,
+      "date": "13 Jul 2026",
+      "note": "Stok Awal"
+    },
+    {
+      "id": 5,
+      "stock_id": 3,
+      "name": "Pita Satin Sage Green",
+      "type": "masuk",
+      "qty": 45,
+      "date": "13 Jul 2026",
+      "note": "Stok Awal"
+    },
+    {
+      "id": 6,
+      "stock_id": 4,
+      "name": "Baby Breath",
+      "type": "masuk",
+      "qty": 7,
+      "date": "13 Jul 2026",
+      "note": "Stok Awal"
+    },
+    {
+      "id": 7,
+      "stock_id": 5,
+      "name": "Oasis Floral Foam",
+      "type": "masuk",
+      "qty": 30,
+      "date": "13 Jul 2026",
+      "note": "Stok Awal"
+    },
+    {
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "masuk",
+      "qty": 98,
+      "date": "14 Jul 2026",
+      "note": "-"
+    },
+    {
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "keluar",
+      "qty": 100,
+      "date": "14 Jul 2026",
+      "note": "-"
+    },
+    {
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "masuk",
+      "qty": 190,
+      "date": "14 Jul 2026",
+      "note": "-"
+    },
+    {
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "keluar",
+      "qty": 370,
+      "date": "14 Jul 2026",
+      "note": "-"
+    },
+    {
+      "stock_id": 1,
+      "name": "Mawar Putih (Avalanche)",
+      "type": "keluar",
+      "qty": 10,
+      "date": "14 Jul 2026",
+      "note": "-"
+    }
+  ],
+  "admins": [
+    {
+      "username": "tyarahmawati",
+      "password": "244466666"
+    }
+  ]
+}

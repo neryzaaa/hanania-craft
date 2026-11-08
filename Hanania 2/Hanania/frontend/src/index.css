@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --color-hanania-pink: #cd6184;
+  --color-hanania-green: #719663;
+  --color-hanania-gold: #ffbd59;
+  --color-hanania-lightpink: #ffecf2;
+  --color-hanania-darkgreen: #50663d;
+  --color-hanania-light: #ffffff;
+  --color-hanania-surface: #ffecf2;
+  --color-hanania-adminbg: #f8fafc;
+  --color-hanania-admintxt: #50663d;
+  --font-sans: "Montserrat", sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-script: "Great Vibes", cursive;
+}
+
+body {
+  background-color: #ffffff;
+  color: #50663d;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hide-scroll::-webkit-scrollbar { display: none; }
+.hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+
+.hero-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #ffecf2 100%);
+}
